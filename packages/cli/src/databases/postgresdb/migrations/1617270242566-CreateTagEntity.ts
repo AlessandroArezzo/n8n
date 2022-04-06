@@ -14,7 +14,14 @@ export class CreateTagEntity1617270242566 implements MigrationInterface {
 
 			// create tags table + relationship with workflow entity
 
-			await queryRunner.query(`CREATE TABLE ${tablePrefix}tag_entity ("id" SERIAL NOT NULL, "name" character varying(24) NOT NULL, "createdAt" TIMESTAMP NOT NULL, "updatedAt" TIMESTAMP NOT NULL, CONSTRAINT "PK_${tablePrefixPure}7a50a9b74ae6855c0dcaee25052" PRIMARY KEY ("id"))`);
+			await queryRunner.query(`CREATE TABLE ${tablePrefix}tag_entity (
+				"id" SERIAL NOT NULL,
+				"name" character varying(24) NOT NULL,
+				"roleId" int NOT NULL,
+				"createdAt" TIMESTAMP NOT NULL,
+				"updatedAt" TIMESTAMP NOT NULL,
+				CONSTRAINT "PK_${tablePrefixPure}7a50a9b74ae6855c0dcaee25052" PRIMARY KEY ("id"))`);
+
 			await queryRunner.query(`CREATE UNIQUE INDEX IDX_${tablePrefixPure}812eb05f7451ca757fb98444ce ON ${tablePrefix}tag_entity ("name") `);
 
 			await queryRunner.query(`CREATE TABLE ${tablePrefix}workflows_tags ("workflowId" integer NOT NULL, "tagId" integer NOT NULL, CONSTRAINT "PK_${tablePrefixPure}a60448a90e51a114e95e2a125b3" PRIMARY KEY ("workflowId", "tagId"))`);
