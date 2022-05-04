@@ -8,7 +8,6 @@ import {
 	Generated,
 	Index,
 	ManyToMany,
-	ManyToOne,
 	PrimaryColumn,
 	UpdateDateColumn,
 } from 'typeorm';
@@ -19,7 +18,6 @@ import { DatabaseType } from '../../index';
 import { ITagDb } from '../../Interfaces';
 import { idStringifier } from '../utils/transformers';
 import { WorkflowEntity } from './WorkflowEntity';
-import {Role} from "./Role";
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function getTimestampSyntax() {
@@ -49,25 +47,10 @@ export class TagEntity implements ITagDb {
 	@Length(1, 24, { message: 'Tag name must be $constraint1 to $constraint2 characters long.' })
 	name: string;
 
-	/*
-	@ManyToOne(() => Role, (role) => role.globalForUsers, {
-		cascade: true,
-		nullable: false,
-	})
-	roleId: Role;
-
-	*/
 
 	@Column({ length: 24, nullable: false })
 	roleId: string;
 
-	/*
-	@ManyToOne(() => Role, (role) => role.globalForTags, {
-		cascade: true,
-		nullable: false,
-	})
-	roleId: Role;
-	*/
 
 	@CreateDateColumn({ precision: 3, default: () => getTimestampSyntax() })
 	@IsOptional() // ignored by validation because set at DB level
