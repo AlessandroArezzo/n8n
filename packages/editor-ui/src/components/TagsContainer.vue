@@ -94,6 +94,7 @@ export default Vue.extend({
 					id: 'count',
 					name: `+${hidden.length}`,
 					title: hiddenTitle,
+					roleId: "0",
 					isCount: true,
 				};
 				toDisplay.splice(visibleCount, 0, countTag);

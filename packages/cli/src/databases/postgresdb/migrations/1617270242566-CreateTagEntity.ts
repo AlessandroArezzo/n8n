@@ -17,7 +17,7 @@ export class CreateTagEntity1617270242566 implements MigrationInterface {
 			await queryRunner.query(`CREATE TABLE ${tablePrefix}tag_entity (
 				"id" SERIAL NOT NULL,
 				"name" character varying(24) NOT NULL,
-				"roleId" int NOT NULL,
+				"roleId" character varying(24) NOT NULL,
 				"createdAt" TIMESTAMP NOT NULL,
 				"updatedAt" TIMESTAMP NOT NULL,
 				CONSTRAINT "PK_${tablePrefixPure}7a50a9b74ae6855c0dcaee25052" PRIMARY KEY ("id"))`);

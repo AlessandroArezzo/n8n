@@ -53,6 +53,7 @@ const module: Module<ITagsState, IRootState> = {
 			return Object.values(state.tags)
 				.sort((a, b) => a.name.localeCompare(b.name));
 		},
+
 		isLoading: (state: ITagsState): boolean => {
 			return state.isLoading;
 		},
@@ -64,31 +65,48 @@ const module: Module<ITagsState, IRootState> = {
 		},
 	},
 	actions: {
-		fetchAll: async (context: ActionContext<ITagsState, IRootState>, params?: { force?: boolean, withUsageCount?: boolean }) => {
-			const { force = false, withUsageCount = false } = params || {};
+		fetchAll: async (context: ActionContext<ITagsState, IRootState>, params?: { roleId?: string, force?: boolean, withUsageCount?: boolean }) => {
+			const { roleId = "", force = false, withUsageCount = false } = params || {};
+
 			if (!force && context.state.fetchedAll && context.state.fetchedUsageCount === withUsageCount) {
 				return context.state.tags;
 			}
 
 			context.commit('setLoading', true);
-			const tags = await getTags(context.rootGetters.getRestApiContext, Boolean(withUsageCount));
-			context.commit('setAllTags', tags);
+			const allTags = await getTags(context.rootGetters.getRestApiContext, Boolean(withUsageCount));
+			let tagsForCurrentRole: ITag[] = [];
+
+			if (roleId == "1"){
+				tagsForCurrentRole = allTags;
+			}
+			else {
+				allTags.forEach(tag => {
+
+					if (tag.roleId == roleId) {
+						tagsForCurrentRole.push(tag);
+					}
+				});
+			}
+			context.commit('setAllTags', tagsForCurrentRole);
 			context.commit('setLoading', false);
 
-			return tags;
+			return tagsForCurrentRole;
 		},
-		create: async (context: ActionContext<ITagsState, IRootState>, name: string) => {
-			const tag = await createTag(context.rootGetters.getRestApiContext, { name });
+
+		create: async (context: ActionContext<ITagsState, IRootState>, { roleId, name }: { roleId: string, name: string }) => {
+			const tag = await createTag(context.rootGetters.getRestApiContext, { roleId, name });
 			context.commit('upsertTags', [tag]);
 
 			return tag;
 		},
+
 		rename: async (context: ActionContext<ITagsState, IRootState>, { id, name }: { id: string, name: string }) => {
 			const tag = await updateTag(context.rootGetters.getRestApiContext, id, { name });
 			context.commit('upsertTags', [tag]);
 
 			return tag;
-		}, 
+		},
+
 		delete: async (context: ActionContext<ITagsState, IRootState>, id: string) => {
 			const deleted = await deleteTag(context.rootGetters.getRestApiContext, id);
 
@@ -98,7 +116,7 @@ const module: Module<ITagsState, IRootState> = {
 			}
 
 			return deleted;
-		}, 
+		},
 	},
 };
 

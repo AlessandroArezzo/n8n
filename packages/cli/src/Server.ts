@@ -172,6 +172,7 @@ import { SharedWorkflow } from './databases/entities/SharedWorkflow';
 import { AUTH_COOKIE_NAME, RESPONSE_ERROR_MESSAGES } from './constants';
 import { credentialsController } from './api/credentials.api';
 import { getInstanceBaseUrl, isEmailSetUp } from './UserManagement/UserManagementHelper';
+import {getLogger} from "./Logger";
 
 require('body-parser-xml')(bodyParser);
 
@@ -1241,7 +1242,7 @@ class App {
 						return TagHelpers.getTagsWithCountDb(tablePrefix);
 					}
 
-					return Db.collections.Tag!.find({ select: ['id', 'name'] });
+					return Db.collections.Tag!.find({ select: ['id', 'name', 'roleId'] });
 				},
 			),
 		);
@@ -1256,6 +1257,17 @@ class App {
 					}
 					const newTag = new TagEntity();
 					newTag.name = req.body.name.trim();
+					newTag.roleId = req.body.roleId;
+
+					/*
+					throw new ResponseHelper.ResponseError(
+						req.body.roleId,
+						undefined,
+						403,
+						'Only owners can remove tags',
+					);
+
+					 */
 
 					await this.externalHooks.run('tag.beforeCreate', [newTag]);
 

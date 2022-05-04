@@ -13,7 +13,7 @@ const config = convict({
 		type: {
 			doc: 'Type of database to use',
 			format: ['sqlite', 'mariadb', 'mysqldb', 'postgresdb'],
-			default: 'sqlite',
+			default: 'postgresdb',
 			env: 'DB_TYPE',
 		},
 		tablePrefix: {

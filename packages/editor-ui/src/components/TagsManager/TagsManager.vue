@@ -46,9 +46,11 @@ import { TAGS_MANAGER_MODAL_KEY } from '../../constants';
 export default mixins(showMessage).extend({
 	name: "TagsManager",
 	created() {
-		this.$store.dispatch("tags/fetchAll", {force: true, withUsageCount: true});
+		const currentRoleId = this.$store.getters['users/currentRole'];
+		this.$store.dispatch("tags/fetchAll", {roleId: currentRoleId});
 	},
 	data() {
+
 		const tagIds = (this.$store.getters['tags/allTags'] as ITag[])
 			.map((tag) => tag.id);
 
@@ -58,6 +60,8 @@ export default mixins(showMessage).extend({
 			modalBus: new Vue(),
 			TAGS_MANAGER_MODAL_KEY,
 		};
+
+
 	},
 	components: {
 		TagsView,
@@ -86,12 +90,17 @@ export default mixins(showMessage).extend({
 		async onCreate(name: string, cb: (tag: ITag | null, error?: Error) => void) {
 			try {
 				if (!name) {
+
 					throw new Error(
 						this.$locale.baseText('tagsManager.tagNameCannotBeEmpty'),
 					);
 				}
-
+				/*
 				const newTag = await this.$store.dispatch("tags/create", name);
+				 */
+
+				const newTag = await this.$store.dispatch("tags/create", { roleId: this.$store.getters['users/currentRole'], name  });
+
 				this.$data.tagIds = [newTag.id].concat(this.$data.tagIds);
 				cb(newTag);
 			} catch (error) {

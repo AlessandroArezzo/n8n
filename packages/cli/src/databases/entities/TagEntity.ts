@@ -49,11 +49,25 @@ export class TagEntity implements ITagDb {
 	@Length(1, 24, { message: 'Tag name must be $constraint1 to $constraint2 characters long.' })
 	name: string;
 
+	/*
 	@ManyToOne(() => Role, (role) => role.globalForUsers, {
 		cascade: true,
 		nullable: false,
 	})
-	role: Role;
+	roleId: Role;
+
+	*/
+
+	@Column({ length: 24, nullable: false })
+	roleId: string;
+
+	/*
+	@ManyToOne(() => Role, (role) => role.globalForTags, {
+		cascade: true,
+		nullable: false,
+	})
+	roleId: Role;
+	*/
 
 	@CreateDateColumn({ precision: 3, default: () => getTimestampSyntax() })
 	@IsOptional() // ignored by validation because set at DB level

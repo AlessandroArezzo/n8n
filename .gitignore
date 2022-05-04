@@ -8,7 +8,7 @@ lerna-debug.log
 yarn.lock
 google-generated-credentials.json
 _START_PACKAGE
-.env
+packages/cli/bin/.env
 .vscode/*
 !.vscode/extensions.json
 .idea

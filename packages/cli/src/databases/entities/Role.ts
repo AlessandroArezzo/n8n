@@ -16,6 +16,7 @@ import { DatabaseType } from '../../index';
 import { User } from './User';
 import { SharedWorkflow } from './SharedWorkflow';
 import { SharedCredentials } from './SharedCredentials';
+import {TagEntity} from "./TagEntity";
 
 type RoleScopes = 'global' | 'workflow' | 'credential';
 
@@ -49,6 +50,11 @@ export class Role {
 
 	@OneToMany(() => User, (user) => user.globalRole)
 	globalForUsers: User[];
+
+	/*
+	@OneToMany(() => TagEntity, (tag) => tag.roleId)
+	globalForTags: TagEntity[];
+	*/
 
 	@CreateDateColumn({ precision: 3, default: () => getTimestampSyntax() })
 	@IsOptional() // ignored by validation because set at DB level

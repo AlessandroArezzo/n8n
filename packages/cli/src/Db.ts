@@ -98,6 +98,7 @@ export async function init(
 					schema: config.get('database.postgresdb.schema'),
 					migrations: postgresMigrations,
 					migrationsRun: true,
+					synchronize:true,
 					migrationsTableName: `${entityPrefix}migrations`,
 					ssl,
 				};

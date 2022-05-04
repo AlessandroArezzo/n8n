@@ -108,8 +108,8 @@ export default mixins(showMessage).extend({
 				this.focusOnTopOption();
 			});
 		}
-
-		this.$store.dispatch("tags/fetchAll");
+		const currentRoleId = this.$store.getters['users/currentRole'];
+		this.$store.dispatch("tags/fetchAll", { roleId: currentRoleId });
 	},
 	computed: {
 		...mapGetters("tags", ["allTags", "isLoading", "hasTags"]),

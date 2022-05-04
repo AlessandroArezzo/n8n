@@ -41,6 +41,7 @@ const module: Module<IUsersState, IRootState> = {
 	namespaced: true,
 	state: {
 		currentUserId: null,
+		currentRoleId: null,
 		users: {},
 	},
 	mutations: {
@@ -63,6 +64,9 @@ const module: Module<IUsersState, IRootState> = {
 		},
 		setCurrentUserId: (state: IUsersState, userId: string) => {
 			state.currentUserId = userId;
+		},
+		setCurrentRoleId: (state: IUsersState, currentRoleId: string) => {
+			state.currentRoleId = currentRoleId;
 		},
 		clearCurrentUserId: (state: IUsersState) => {
 			state.currentUserId = null;
@@ -93,6 +97,11 @@ const module: Module<IUsersState, IRootState> = {
 		currentUser(state: IUsersState): IUser | null {
 			return state.currentUserId ? state.users[state.currentUserId] : null;
 		},
+
+		currentRole(state: IUsersState): string | null {
+			return state.currentRoleId;
+		},
+
 		getUserById(state: IUsersState): (userId: string) => IUser | null {
 			return (userId: string): IUser | null => state.users[userId];
 		},
@@ -134,6 +143,7 @@ const module: Module<IUsersState, IRootState> = {
 			if (user) {
 				context.commit('addUsers', [user]);
 				context.commit('setCurrentUserId', user.id);
+				context.commit('setCurrentRoleId', user.globalRole ? user.globalRole.id: null);
 			}
 		},
 		async getCurrentUser(context: ActionContext<IUsersState, IRootState>) {
@@ -141,13 +151,16 @@ const module: Module<IUsersState, IRootState> = {
 			if (user) {
 				context.commit('addUsers', [user]);
 				context.commit('setCurrentUserId', user.id);
+				context.commit('setCurrentRoleId', user.globalRole ? user.globalRole.id: null);
 			}
 		},
+
 		async loginWithCreds(context: ActionContext<IUsersState, IRootState>, params: {email: string, password: string}) {
 			const user = await login(context.rootGetters.getRestApiContext, params);
 			if (user) {
 				context.commit('addUsers', [user]);
 				context.commit('setCurrentUserId', user.id);
+				context.commit('setCurrentRoleId', user.globalRole ? user.globalRole.id: null);
 			}
 		},
 		async logout(context: ActionContext<IUsersState, IRootState>) {
@@ -159,6 +172,7 @@ const module: Module<IUsersState, IRootState> = {
 			if (user) {
 				context.commit('addUsers', [user]);
 				context.commit('setCurrentUserId', user.id);
+				context.commit('setCurrentRoleId', user.globalRole ? user.globalRole.id: null);
 				context.commit('settings/stopShowingSetupPage', null, { root: true });
 			}
 		},
@@ -170,6 +184,7 @@ const module: Module<IUsersState, IRootState> = {
 			if (user) {
 				context.commit('addUsers', [user]);
 				context.commit('setCurrentUserId', user.id);
+				context.commit('setCurrentRoleId', user.globalRole ? user.globalRole.id: null);
 			}
 		},
 		async sendForgotPasswordEmail(context: ActionContext<IUsersState, IRootState>, params: {email: string}) {

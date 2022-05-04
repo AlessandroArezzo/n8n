@@ -103,6 +103,7 @@ export interface ISettingsDb {
 	loadOnStartup: boolean;
 }
 
+
 // ----------------------------------
 //               tags
 // ----------------------------------
@@ -110,6 +111,7 @@ export interface ISettingsDb {
 export interface ITagDb {
 	id: number;
 	name: string;
+	//roleId: Role,
 	createdAt: Date;
 	updatedAt: Date;
 }

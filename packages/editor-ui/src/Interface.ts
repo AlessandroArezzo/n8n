@@ -704,6 +704,7 @@ export interface ICategoriesWithNodes {
 export interface ITag {
 	id: string;
 	name: string;
+	roleId: string;
 	usageCount?: number;
 }
 
@@ -858,6 +859,7 @@ export interface IVersionsState {
 
 export interface IUsersState {
 	currentUserId: null | string;
+	currentRoleId: null | string;
 	users: {[userId: string]: IUser};
 }
 
