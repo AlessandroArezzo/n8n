@@ -3,11 +3,11 @@ import {
 	ILogLevel,
 	IN8nPrompts,
 	IN8nUISettings,
-	IN8nValueSurveyData,
+	IN8nValueSurveyData, IRoleDb, IRoleDropdown,
 	IRootState,
-	ISettingsState,
+	ISettingsState, ITag,
 } from '../Interface';
-import { getPromptsData, submitValueSurvey, submitContactInfo, getSettings } from '../api/settings';
+import { getPromptsData, submitValueSurvey, submitContactInfo, getSettings, getRoles} from '../api/settings';
 import Vue from 'vue';
 import { CONTACT_PROMPT_MODAL_KEY, VALUE_SURVEY_MODAL_KEY } from '@/constants';
 import { ITelemetrySettings } from 'n8n-workflow';
@@ -24,6 +24,7 @@ const module: Module<ISettingsState, IRootState> = {
 			smtpSetup: false,
 		},
 		templatesEndpointHealthy: false,
+		roles: {},
 	},
 	getters: {
 		versionCli(state: ISettingsState) {
@@ -68,6 +69,25 @@ const module: Module<ISettingsState, IRootState> = {
 		templatesHost: (state): string  => {
 			return state.settings.templates.host;
 		},
+		allRoles(state: ISettingsState): IRoleDb[] {
+			return Object.values(state.roles)
+				.sort((a, b) => a.name.localeCompare(b.name));
+		},
+		allRolesToShow(state: ISettingsState): IRoleDropdown[] {
+			const allRoles = Object.values(state.roles)
+				.sort((a, b) => a.name.localeCompare(b.name));
+			const rolesToShow: IRoleDropdown[] = [];
+			allRoles.forEach(role => {
+				// not showed role with ids 1,3,4: roles for the owner in db
+				if (role.id != 1 && role.id != 3 && role.id != 4) {
+					rolesToShow.push({
+						value: role.id,
+						label: role.name,
+					});
+				}
+			});
+			return rolesToShow;
+		},
 	},
 	mutations: {
 		setSettings(state: ISettingsState, settings: IN8nUISettings) {
@@ -84,6 +104,14 @@ const module: Module<ISettingsState, IRootState> = {
 		},
 		setTemplatesEndpointHealthy(state: ISettingsState) {
 			state.templatesEndpointHealthy = true;
+		},
+		setAllRoles: (state: ISettingsState, roles: IRoleDb[]) => {
+			state.roles = roles
+				.reduce((accu: { [id: string]: IRoleDb }, role: IRoleDb) => {
+					accu[role.id] = role;
+
+					return accu;
+				}, {});
 		},
 	},
 	actions: {
@@ -152,6 +180,11 @@ const module: Module<ISettingsState, IRootState> = {
 			const timeout = new Promise((_, reject) => setTimeout(() => reject(), 2000));
 			await Promise.race([testHealthEndpoint(context.getters.templatesHost), timeout]);
 			context.commit('setTemplatesEndpointHealthy', true);
+		},
+		async fetchRoles(context: ActionContext<ISettingsState, IRootState>) {
+			console.log("FETCH ROLES");
+			const roles = await getRoles(context.rootGetters.getRestApiContext);
+			context.commit('setAllRoles', roles);
 		},
 	},
 };

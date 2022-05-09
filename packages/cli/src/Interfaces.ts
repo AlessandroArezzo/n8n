@@ -111,7 +111,7 @@ export interface ISettingsDb {
 export interface ITagDb {
 	id: number;
 	name: string;
-	//roleId: Role,
+	roleId: string,
 	createdAt: Date;
 	updatedAt: Date;
 }

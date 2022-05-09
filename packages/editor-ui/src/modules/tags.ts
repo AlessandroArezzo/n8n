@@ -87,6 +87,7 @@ const module: Module<ITagsState, IRootState> = {
 					}
 				});
 			}
+
 			context.commit('setAllTags', tagsForCurrentRole);
 			context.commit('setLoading', false);
 

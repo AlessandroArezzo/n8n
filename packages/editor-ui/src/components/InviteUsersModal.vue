@@ -32,6 +32,7 @@ import Vue from "vue";
 import { IFormInputs, IInviteResponse } from "@/Interface";
 import { VALID_EMAIL_REGEX, INVITE_USER_MODAL_KEY } from "@/constants";
 import { ROLE } from "@/modules/userHelpers";
+import { Role } from "n8n/dist/src/databases/entities/Role";
 
 const NAME_EMAIL_FORMAT_REGEX = /^.* <(.*)>$/;
 
@@ -84,17 +85,12 @@ export default mixins(showMessage).extend({
 			},
 			{
 				name: 'role',
-				initialValue: 'member',
+				initialValue: this.$store.getters['settings/allRolesToShow'][0].label,
 				properties: {
 					label: this.$locale.baseText('auth.role'),
 					required: true,
 					type: 'select',
-					options: [
-						{
-							value: ROLE.Member,
-							label: this.$locale.baseText('auth.roles.member'),
-						},
-					],
+					options:  this.$store.getters['settings/allRolesToShow'],
 					capitalize: true,
 				},
 			},

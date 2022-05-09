@@ -1,4 +1,4 @@
-import { IRestApiContext, IN8nPrompts, IN8nValueSurveyData, IN8nUISettings } from '../Interface';
+import {IRestApiContext, IN8nPrompts, IN8nValueSurveyData, IN8nUISettings, IRoleDb} from '../Interface';
 import { makeRestApiRequest, get, post } from './helpers';
 import { N8N_IO_BASE_URL } from '@/constants';
 
@@ -16,4 +16,8 @@ export async function submitContactInfo(instanceId: string, userId: string, emai
 
 export async function submitValueSurvey(instanceId: string, userId: string, params: IN8nValueSurveyData): Promise<IN8nPrompts> {
 	return await post(N8N_IO_BASE_URL, '/value-survey', params, {'n8n-instance-id': instanceId, 'n8n-user-id': userId});
+}
+
+export function getRoles(context: IRestApiContext): Promise<IRoleDb[]> {
+	return makeRestApiRequest(context, 'GET', '/roles');
 }

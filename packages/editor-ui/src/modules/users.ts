@@ -22,7 +22,6 @@ import {
 import Vue from 'vue';
 import {  ActionContext, Module } from 'vuex';
 import {
-	IPermissions,
 	IInviteResponse,
 	IPersonalizationSurveyAnswersV2,
 	IRootState,

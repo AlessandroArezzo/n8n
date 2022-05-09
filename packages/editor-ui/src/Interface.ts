@@ -829,6 +829,7 @@ export interface ISettingsState {
 	promptsData: IN8nPrompts;
 	userManagement: IUserManagementConfig;
 	templatesEndpointHealthy: boolean;
+	roles: {[userId: string]: IRoleDb};
 }
 
 export interface ITemplateState {
@@ -886,6 +887,16 @@ export interface IBounds {
 export type ILogInStatus = 'LoggedIn' | 'LoggedOut';
 
 export type IRole = 'default' | 'owner' | 'member';
+
+export interface IRoleDb {
+	id: number;
+	name: string;
+}
+
+export interface IRoleDropdown {
+	value: number;
+	label: string;
+}
 
 export interface IUserResponse {
 	id: string;

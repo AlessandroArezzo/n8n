@@ -4,6 +4,7 @@ import { IPermissions, IPersonalizationSurveyAnswersV1, IPersonalizationSurveyAn
 
 import { ILogInStatus, IRole, IUserPermissions } from "@/Interface";
 
+
 export const ROLE: {Owner: IRole, Member: IRole, Default: IRole} = {
 	Owner: 'owner',
 	Member: 'member',

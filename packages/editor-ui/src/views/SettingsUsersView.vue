@@ -53,6 +53,7 @@ export default mixins(showMessage).extend({
 	async mounted() {
 		if (!this.showUMSetupWarning) {
 			await this.$store.dispatch('users/fetchUsers');
+			await this.$store.dispatch('settings/fetchRoles');
 		}
 	},
 	computed: {
