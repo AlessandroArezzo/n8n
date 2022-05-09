@@ -148,6 +148,7 @@ import * as TagHelpers from './TagHelpers';
 
 import { InternalHooksManager } from './InternalHooksManager';
 import { TagEntity } from './databases/entities/TagEntity';
+import { Role } from './databases/entities/Role';
 import { WorkflowEntity } from './databases/entities/WorkflowEntity';
 import { getSharedWorkflowIds, whereClause } from './WorkflowHelpers';
 import { getCredentialTranslationPath, getNodeTranslationPath } from './TranslationHelpers';
@@ -1226,6 +1227,21 @@ class App {
 			),
 		);
 
+		// Retrieves all roles
+		this.app.get(
+			`/${this.restEndpoint}/roles`,
+			ResponseHelper.send(
+				async (
+					req: express.Request,
+					res: express.Response,
+				): Promise<Role[]> => {
+
+					return Db.collections.Role!.find({ select: ['id', 'name'] });
+				},
+			),
+		);
+
+
 		// Retrieves all tags, with or without usage count
 		this.app.get(
 			`/${this.restEndpoint}/tags`,
@@ -1258,16 +1274,6 @@ class App {
 					const newTag = new TagEntity();
 					newTag.name = req.body.name.trim();
 					newTag.roleId = req.body.roleId;
-
-					/*
-					throw new ResponseHelper.ResponseError(
-						req.body.roleId,
-						undefined,
-						403,
-						'Only owners can remove tags',
-					);
-
-					 */
 
 					await this.externalHooks.run('tag.beforeCreate', [newTag]);
 
