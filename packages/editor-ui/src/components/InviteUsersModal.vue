@@ -86,7 +86,7 @@ export default mixins(showMessage).extend({
 			},
 			{
 				name: 'role',
-				initialValue: this.$store.getters['settings/allRolesToShow'][0].label,
+				initialValue: "",
 				properties: {
 					label: this.$locale.baseText('auth.role'),
 					required: true,
