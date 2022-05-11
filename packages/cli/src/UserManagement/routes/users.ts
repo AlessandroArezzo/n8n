@@ -73,22 +73,23 @@ export function usersNamespace(this: N8nApp): void {
 					400,
 				);
 			}
+			const { emails, roleId } = req.body;
 
-			if (!Array.isArray(req.body)) {
+			if (!Array.isArray(emails)) {
 				Logger.debug(
 					'Request to send email invite(s) to user(s) failed because the payload is not an array',
 					{
-						payload: req.body,
+						payload: emails,
 					},
 				);
 				throw new ResponseHelper.ResponseError('Invalid payload', undefined, 400);
 			}
 
-			if (!req.body.length) return [];
+			if (!emails.length) return [];
 
 			const createUsers: { [key: string]: string | null } = {};
 			// Validate payload
-			req.body.forEach((invite) => {
+			emails.forEach((invite) => {
 				if (typeof invite !== 'object' || !invite.email) {
 					throw new ResponseHelper.ResponseError(
 						'Request to send email invite(s) to user(s) failed because the payload is not an array shaped Array<{ email: string }>',
@@ -108,7 +109,7 @@ export function usersNamespace(this: N8nApp): void {
 				createUsers[invite.email] = null;
 			});
 
-			const role = await Db.collections.Role!.findOne({ scope: 'global', name: 'member' });
+			const role = await Db.collections.Role!.findOne({ id: roleId });
 
 			if (!role) {
 				Logger.error(

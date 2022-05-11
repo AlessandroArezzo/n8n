@@ -182,7 +182,7 @@ export declare namespace PasswordResetRequest {
 // ----------------------------------
 
 export declare namespace UserRequest {
-	export type Invite = AuthenticatedRequest<{}, {}, Array<{ email: string }>>;
+	export type Invite = AuthenticatedRequest<{}, {}, {emails: Array<{ email: string }>, roleId: number}>;
 
 	export type ResolveSignUp = AuthlessRequest<
 		{},

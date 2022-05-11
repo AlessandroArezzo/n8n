@@ -61,6 +61,7 @@ export default mixins(showMessage).extend({
 			formBus: new Vue(),
 			modalBus: new Vue(),
 			emails: '',
+			role: '',
 			loading: false,
 			INVITE_USER_MODAL_KEY,
 		};
@@ -136,6 +137,9 @@ export default mixins(showMessage).extend({
 			if (e.name === 'emails') {
 				this.emails = e.value;
 			}
+			else if (e.name === 'role') {
+				this.role = e.value;
+			}
 		},
 		async onSubmit() {
 			try {
@@ -149,7 +153,9 @@ export default mixins(showMessage).extend({
 					throw new Error(this.$locale.baseText('settings.users.noUsersToInvite'));
 				}
 
-				const invited: IInviteResponse[] = await this.$store.dispatch('users/inviteUsers', emails);
+				const roleId = this.role;
+
+				const invited: IInviteResponse[] = await this.$store.dispatch('users/inviteUsers', {emails, roleId});
 				const invitedEmails = invited.reduce((accu, {user, error}) => {
 					if (error) {
 						accu.error.push(user.email);
