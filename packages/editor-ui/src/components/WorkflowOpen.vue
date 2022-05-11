@@ -38,6 +38,7 @@
 							</div>
 						</template>
 					</el-table-column>
+					<el-table-column property="role" :label="$locale.baseText('Role')" class-name="clickable" width="155" sortable></el-table-column>
 					<el-table-column property="createdAt" :label="$locale.baseText('workflowOpen.created')" class-name="clickable" width="155" sortable></el-table-column>
 					<el-table-column property="updatedAt" :label="$locale.baseText('workflowOpen.updated')" class-name="clickable" width="155" sortable></el-table-column>
 					<el-table-column :label="$locale.baseText('workflowOpen.active')" width="75">
@@ -204,7 +205,10 @@ export default mixins(
 		async loadWorkflows () {
 			try {
 				this.workflows = await this.restApi().getWorkflows();
-				this.workflows.forEach((workflowData: IWorkflowShortResponse) => {
+
+				await this.workflows.forEach(async (workflowData: IWorkflowShortResponse) => {
+					const sharedWorkflow = await this.restApi().getSharedWorkflow(workflowData.id);
+					workflowData.role = sharedWorkflow.role.name;
 					workflowData.createdAt = convertToDisplayDate(workflowData.createdAt as number);
 					workflowData.updatedAt = convertToDisplayDate(workflowData.updatedAt as number);
 				});

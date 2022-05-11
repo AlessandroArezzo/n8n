@@ -175,6 +175,7 @@ export interface IRestApi {
 	updateWorkflow(id: string, data: IWorkflowDataUpdate): Promise<IWorkflowDb>;
 	deleteWorkflow(name: string): Promise<void>;
 	getWorkflow(id: string): Promise<IWorkflowDb>;
+	getSharedWorkflow(id: string): Promise<ISharedWorkflowDb>;
 	getWorkflows(filter?: object): Promise<IWorkflowShortResponse[]>;
 	getWorkflowFromUrl(url: string): Promise<IWorkflowDb>;
 	getExecution(id: string): Promise<IExecutionResponse>;
@@ -262,6 +263,13 @@ export interface IWorkflowTemplate {
 }
 
 // Almost identical to cli.Interfaces.ts
+export interface ISharedWorkflowDb {
+	workflowId: number;
+	userId: string;
+	role: IRoleDb;
+}
+
+// Almost identical to cli.Interfaces.ts
 export interface IWorkflowDb {
 	id: string;
 	name: string;
@@ -278,6 +286,7 @@ export interface IWorkflowDb {
 export interface IWorkflowShortResponse {
 	id: string;
 	name: string;
+	role: string;
 	active: boolean;
 	createdAt: number | string;
 	updatedAt: number | string;

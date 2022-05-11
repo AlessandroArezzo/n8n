@@ -16,7 +16,7 @@ import {
 	IWorkflowShortResponse,
 	IRestApi,
 	IWorkflowDataUpdate,
-	INodeTranslationHeaders,
+	INodeTranslationHeaders, ISharedWorkflowDb,
 } from '@/Interface';
 import {
 	IDataObject,
@@ -130,6 +130,11 @@ export const restApi = Vue.extend({
 				// Returns the workflow with the given name
 				getWorkflow: (id: string): Promise<IWorkflowDb> => {
 					return self.restApi().makeRestApiRequest('GET', `/workflows/${id}`);
+				},
+
+				// Returns the workflow with the given name
+				getSharedWorkflow: (id: string): Promise<ISharedWorkflowDb> => {
+					return self.restApi().makeRestApiRequest('GET', `/sharedWorkflows/${id}`);
 				},
 
 				// Returns all saved workflows

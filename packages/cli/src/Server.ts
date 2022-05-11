@@ -766,8 +766,7 @@ class App {
 					savedWorkflow = await transactionManager.save<WorkflowEntity>(newWorkflow);
 
 					const role = await Db.collections.Role!.findOneOrFail({
-						name: 'owner',
-						scope: 'workflow',
+						id: req.user.globalRole.id
 					});
 
 					const newSharedWorkflow = new SharedWorkflow();
@@ -856,6 +855,32 @@ class App {
 				},
 			),
 		);
+
+		// Retrieves a specific shared workflow
+		this.app.get(
+			`/${this.restEndpoint}/sharedWorkflows/:id`,
+			ResponseHelper.send(
+				async (
+					req: WorkflowRequest.Get
+				): Promise<SharedWorkflow | null> => {
+					const { id } = req.params;
+					const workflowId: number = +id;
+
+					const shared = await Db.collections.SharedWorkflow!.findOne({
+						relations: ['workflow', 'role'],
+						where: whereClause({
+							user: req.user,
+							entityType: 'workflow',
+							entityId: workflowId.toString(),
+						}),
+					});
+
+					return shared ? shared: null;
+				},
+			),
+		);
+
+
 
 		// Returns workflows
 		this.app.get(
@@ -1240,7 +1265,6 @@ class App {
 				},
 			),
 		);
-
 
 		// Retrieves all tags, with or without usage count
 		this.app.get(
