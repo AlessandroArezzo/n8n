@@ -38,7 +38,7 @@
 							</div>
 						</template>
 					</el-table-column>
-					<el-table-column property="role" :label="$locale.baseText('Role')" class-name="clickable" width="155" sortable></el-table-column>
+					<el-table-column property="role" :label="$locale.baseText('Role')" class-name="clickable" width="155" sortable  v-if=canAccessUsersSettings()></el-table-column>
 					<el-table-column property="createdAt" :label="$locale.baseText('workflowOpen.created')" class-name="clickable" width="155" sortable></el-table-column>
 					<el-table-column property="updatedAt" :label="$locale.baseText('workflowOpen.updated')" class-name="clickable" width="155" sortable></el-table-column>
 					<el-table-column :label="$locale.baseText('workflowOpen.active')" width="75">
@@ -61,6 +61,7 @@ import { restApi } from '@/components/mixins/restApi';
 import { genericHelpers } from '@/components/mixins/genericHelpers';
 import { workflowHelpers } from '@/components/mixins/workflowHelpers';
 import { showMessage } from '@/components/mixins/showMessage';
+import { userHelpers } from './mixins/userHelpers';
 
 import Modal from '@/components/Modal.vue';
 import TagsContainer from '@/components/TagsContainer.vue';
@@ -71,6 +72,7 @@ import { mapGetters } from 'vuex';
 import { MODAL_CANCEL, MODAL_CLOSE, MODAL_CONFIRMED, VIEWS, WORKFLOW_OPEN_MODAL_KEY } from '../constants';
 
 export default mixins(
+	userHelpers,
 	genericHelpers,
 	restApi,
 	showMessage,
@@ -130,6 +132,9 @@ export default mixins(
 		});
 	},
 	methods: {
+		canAccessUsersSettings(): boolean {
+			return this.canUserAccessRouteByName(VIEWS.USERS_SETTINGS);
+		},
 		getIds(tags: ITag[] | undefined) {
 			return (tags || []).map((tag) => tag.id);
 		},
