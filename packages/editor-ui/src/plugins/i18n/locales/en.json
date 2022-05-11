@@ -972,6 +972,7 @@
 		},
 		"created": "Created",
 		"name": "@:reusableBaseText.name",
+		"role": "Role",
 		"openWorkflow": "Open Workflow",
 		"filterWorkflows": "Filter by tags",
 		"searchWorkflows": "Search workflows...",

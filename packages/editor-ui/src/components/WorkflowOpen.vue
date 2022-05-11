@@ -38,7 +38,7 @@
 							</div>
 						</template>
 					</el-table-column>
-					<el-table-column property="role" :label="$locale.baseText('Role')" class-name="clickable" width="155" sortable  v-if=canAccessUsersSettings()></el-table-column>
+					<el-table-column property="role" :label="$locale.baseText('workflowOpen.role')" class-name="clickable" width="155" sortable  v-if=canAccessUsersSettings()></el-table-column>
 					<el-table-column property="createdAt" :label="$locale.baseText('workflowOpen.created')" class-name="clickable" width="155" sortable></el-table-column>
 					<el-table-column property="updatedAt" :label="$locale.baseText('workflowOpen.updated')" class-name="clickable" width="155" sortable></el-table-column>
 					<el-table-column :label="$locale.baseText('workflowOpen.active')" width="75">
