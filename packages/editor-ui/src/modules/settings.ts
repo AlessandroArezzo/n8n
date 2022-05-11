@@ -79,7 +79,7 @@ const module: Module<ISettingsState, IRootState> = {
 			const rolesToShow: IRoleDropdown[] = [];
 			allRoles.forEach(role => {
 				// not showed role with ids 1,3,4: roles for the owner in db
-				if (role.id != 1 && role.id != 3 && role.id != 4) {
+				if (role.id !== 1 && role.id !== 3 && role.id !== 4) {
 					rolesToShow.push({
 						value: role.id,
 						label: role.name,
@@ -182,7 +182,6 @@ const module: Module<ISettingsState, IRootState> = {
 			context.commit('setTemplatesEndpointHealthy', true);
 		},
 		async fetchRoles(context: ActionContext<ISettingsState, IRootState>) {
-			console.log("FETCH ROLES");
 			const roles = await getRoles(context.rootGetters.getRestApiContext);
 			context.commit('setAllRoles', roles);
 		},

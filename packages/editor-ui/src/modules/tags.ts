@@ -76,13 +76,13 @@ const module: Module<ITagsState, IRootState> = {
 			const allTags = await getTags(context.rootGetters.getRestApiContext, Boolean(withUsageCount));
 			let tagsForCurrentRole: ITag[] = [];
 
-			if (roleId == "1"){
+			if (roleId.toString() === "1"){
 				tagsForCurrentRole = allTags;
 			}
 			else {
 				allTags.forEach(tag => {
 
-					if (tag.roleId == roleId) {
+					if (tag.roleId === roleId.toString()) {
 						tagsForCurrentRole.push(tag);
 					}
 				});
